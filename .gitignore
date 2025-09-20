@@ -2,7 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+.env
+.DS_Store
+.env.local
+firebase-creds.json
 # C extensions
 *.so
 
