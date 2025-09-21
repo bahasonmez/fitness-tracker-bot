@@ -88,4 +88,15 @@ def get_user_videos(telegram_id, exercise_name=None):
     if exercise_name:
         ref = ref.where('exercise_name', '==', exercise_name)
     docs = ref.order_by('created_at').stream()
-    return [doc.to_dict() | {'id': doc.id} for doc in docs]
+    result = []
+    for doc in docs:
+        data = doc.to_dict()
+        # Firestore timestamp → datetime
+        if 'created_at' in data and hasattr(data['created_at'], 'to_datetime'):
+            data['created_at'] = data['created_at'].to_datetime()
+        # ID'yi ekle
+        data['id'] = doc.id
+        result.append(data)
+    return result  # 👉 HER ELEMAN BİR DICT!
+
+__all__ = ['get_user', 'create_user', 'update_last_active', 'log_workout', 'save_video_metadata', 'log_measurement', 'get_user_workouts', 'get_user_measurements', 'get_user_videos', 'db']
